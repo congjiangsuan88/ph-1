@@ -81,7 +81,9 @@
     </style>
 </head>
 <body class="pb-12 text-slate-900">
-
+    <div style="display:none;">
+        <img src="https://ph-1.com/og-image.jpg" alt="PH-1 菲华助手分享图">
+    </div>
     <nav class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md">
         <div class="container mx-auto flex justify-between items-center max-w-6xl">
             <div class="flex items-center gap-2 font-black text-xl tracking-tighter">
@@ -171,16 +173,69 @@
             <div id="locList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
-        <footer onclick="copyAndGo()" class="bg-slate-900 p-8 rounded-[3rem] text-center cursor-pointer hover:bg-slate-800 transition-all group relative overflow-hidden shadow-2xl">
+        <section onclick="copyAndGo()" class="bg-slate-900 p-8 rounded-[3rem] text-center cursor-pointer hover:bg-slate-800 transition-all group relative overflow-hidden shadow-2xl">
             <div id="copyTip" class="absolute inset-0 bg-blue-600 flex items-center justify-center text-white font-bold opacity-0 transition-opacity">
                 ✅ 已复制 @ph_one_com 并跳转
             </div>
             <div class="text-blue-400 font-black text-xl mb-1 group-hover:scale-105 transition-transform">✨ 商务合作 / 签证换汇 ✨</div>
             <p class="text-slate-500 text-[10px] tracking-widest uppercase font-bold">TELEGRAM: @ph_one_com (点击复制联系)</p>
-        </footer>
+        </section>
 
     </main>
+    <div id="shareBtn" onclick="shareSite()" class="fixed bottom-24 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center cursor-pointer hover:bg-blue-700 active:scale-90 transition-all z-[60] border-4 border-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+        </svg>
+        <span class="absolute -top-1 -right-1 flex h-4 w-4">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-[8px] items-center justify-center font-bold">荐</span>
+        </span>
+    </div>
+    <footer class="mt-12 bg-slate-900 text-slate-400 py-12 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 border-b border-slate-800 pb-10">
 
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2 text-white font-black text-xl">
+                        <span class="text-2xl">🇵🇭</span> PH-1 <span class="text-blue-400">菲华助手</span>
+                    </div>
+                    <p class="text-sm leading-relaxed">
+                        PH-1.com 是专为在菲华人打造的一站式生活服务平台。我们提供实时的比索(PHP)对人民币(CNY)汇率查询、精细的签证续签提醒以及菲律宾政府部门（移民局、LTO、DFA、PSA）的办事指南。
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-white font-bold">快捷工具</h3>
+                    <ul class="text-sm space-y-2">
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">实时比索汇率换算器</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">菲律宾签证到期计算</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">移民局总局办事攻略</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">菲律宾驾照办理指南</a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-white font-bold">联系我们</h3>
+                    <p class="text-sm">合作咨询：<span class="text-blue-400 cursor-pointer" onclick="copyAndGo()">@ph_one_com (Telegram)</span></p>
+                    <div class="pt-2">
+                        <span class="inline-block bg-slate-800 px-3 py-1 rounded text-[10px] uppercase tracking-widest font-bold">2026 Updated</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px]">
+                <div class="text-center md:text-left">
+                    © 2026 PH-1.com (菲华助手). All Rights Reserved.
+                    <span class="hidden md:inline ml-4 text-slate-600">菲律宾换汇, 马尼拉租房, 签证延期, 比索汇率走势, 菲华生活网</span>
+                </div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white">隐私政策</a>
+                    <a href="#" class="hover:text-white">服务条款</a>
+                    <a href="https://ph-1.com/sitemap.xml" class="hover:text-white">站点地图</a>
+                </div>
+            </div>
+        </div>
+    </footer>
     <script>
         // --- 逻辑与之前版本保持一致 ---
         let currentRate = 8.70;
@@ -287,7 +342,27 @@
                 }, 800);
             });
         }
+        async function shareSite() {
+            const shareData = {
+                title: 'PH-1 菲华助手',
+                text: '我在用这个菲律宾生活工具箱，算汇率、查签证、避坑指南超好用！推荐给你 🇵🇭',
+                url: 'https://ph-1.com/'
+            };
 
+            try {
+                // 检查浏览器是否支持原生分享 (移动端浏览器基本都支持)
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    // 如果不支持（如某些旧版 PC 浏览器），则退回到复制链接
+                    navigator.clipboard.writeText(shareData.url).then(() => {
+                        alert("浏览器暂不支持直接分享，已自动为您复制网址，快去粘贴给好友吧！");
+                    });
+                }
+            } catch (err) {
+                console.log('分享取消或失败:', err);
+            }
+        }
         window.onload = function () {
             document.getElementById('cnyInput').addEventListener('input', calcToPhp);
             document.getElementById('phpInput').addEventListener('input', calcToCny);
