@@ -2,20 +2,30 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 基础 SEO 优化 -->
-    <title>在菲生活助手 - 2026菲律宾汇率换算、签证续签提醒及办事指南</title>
-    <meta name="description" content="专为在菲华人打造的一站式工具。提供实时比索汇率计算（含市场损耗）、旅游签/9G工签到期提醒、移民局/DFA/NBI办事指南及本地避坑贴士。">
-    <meta name="keywords" content="菲律宾汇率,比索换算,菲律宾签证续签,移民局地址,马尼拉生活助手,菲律宾办事避坑">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <!-- 针对移动端谷歌搜索的优化 -->
-    <link rel="canonical" href="https://xn--6qqv7i2xdt95b.com" />
-    <meta name="robots" content="index, follow">
-    <script type="application/ld:json">
+    <title>PH-1 菲华助手 - 2026 菲律宾汇率计算、签证提醒与办事指南</title>
+    <meta name="description" content="PH-1.com 专为在菲华人打造。提供 2026 实时比索汇率、签证到期自动计算、移民局办事避坑指南，是您在菲律宾生活、工作的必备助手。">
+    <meta name="keywords" content="菲律宾汇率,比索换人民币,菲律宾签证续签,移民局办事指南,马尼拉生活助手,PH-1,菲华助手">
+    <meta name="author" content="PH-1.com">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ph-1.com/">
+    <meta property="og:title" content="PH-1 菲华助手 - 菲律宾生活一站式工具箱">
+    <meta property="og:description" content="实时汇率、签证计算、办事避坑，点击即刻体验。">
+    <meta property="og:image" content="https://ph-1.com/og-image.jpg">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PH-1 菲华助手">
+    <meta name="twitter:description" content="2026 菲律宾生活必备神器，汇率签证不求人。">
+    <meta name="twitter:image" content="https://ph-1.com/og-image.jpg">
+
+    <script type="application/ld+json">
         {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        "name": "在菲生活助手",
+        "name": "PH-1 菲华助手",
+        "url": "https://ph-1.com",
         "operatingSystem": "WEB",
         "applicationCategory": "FinanceApplication, TravelApplication",
         "description": "提供菲律宾生活所需的实时汇率、签证提醒和政府部门办事指南。",
@@ -32,270 +42,265 @@
         }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        /* 字体平滑优化 */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
             -webkit-font-smoothing: antialiased;
+            background-color: #f8fafc;
         }
 
-        .card-shadow {
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-200%);
+            }
+        }
+
+        .animate-scroll {
+            animation: scroll 35s linear infinite;
         }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen pb-12 text-slate-900">
+<body class="pb-12 text-slate-900">
 
-    <!-- 导航栏 -->
-    <nav class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-xl">
+    <nav class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md">
         <div class="container mx-auto flex justify-between items-center max-w-6xl">
-            <div class="flex items-center gap-2 font-bold text-lg">
-                <span class="text-xl">🇵🇭</span> 在菲生活助手
+            <div class="flex items-center gap-2 font-black text-xl tracking-tighter">
+                <span class="text-2xl">🇵🇭</span> PH-1 <span class="text-blue-400">菲华助手</span>
             </div>
-            <div class="text-[10px] bg-slate-800 px-3 py-1.5 rounded border border-slate-700 font-medium">
-                官汇：1 CNY ≈ <span id="php-rate" class="text-yellow-400 font-bold">8.50</span> PHP
+            <div class="text-[11px] bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 font-bold">
+                1 CNY ≈ <span id="php-rate" class="text-yellow-400">...</span> PHP
             </div>
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 mt-8 max-w-6xl space-y-8">
-
-        <!-- 第一部分：功能区 (电脑端并排) -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-            <!-- 1. 双向汇率换算 -->
-            <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-200">
-                <h2 class="font-bold text-slate-800 mb-6 flex items-center gap-3">
-                    <!-- SVG 图标代替 FontAwesome -->
-                    <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                    汇率换算 (含损耗)
-                </h2>
-                <div class="space-y-6">
-                    <div class="flex items-center gap-4">
-                        <div class="flex-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">人民币 CNY</label>
-                            <input type="number" id="cnyInput" placeholder="¥ 0.00" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl text-xl font-bold focus:ring-2 focus:ring-blue-500 outline-none">
-                        </div>
-                        <div class="flex-1">
-                            <label class="text-[10px] font-bold text-blue-500 uppercase mb-2 block">到手 PHP</label>
-                            <input type="number" id="phpOutput" readonly class="w-full p-4 bg-blue-50 border border-blue-100 rounded-2xl text-xl font-bold text-blue-700 outline-none">
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 border-t pt-4">
-                        <div class="flex-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">比索 PHP</label>
-                            <input type="number" id="phpInputReverse" placeholder="₱ 0.00" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl text-xl font-bold focus:ring-2 focus:ring-orange-500 outline-none">
-                        </div>
-                        <div class="flex-1">
-                            <label class="text-[10px] font-bold text-orange-500 uppercase mb-2 block">折合 CNY</label>
-                            <input type="number" id="cnyOutputReverse" readonly class="w-full p-4 bg-orange-50 border border-orange-100 rounded-2xl text-xl font-bold text-orange-700 outline-none">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. 签证提醒 -->
-            <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-200">
-                <h2 class="font-bold text-slate-800 mb-6 flex items-center gap-3">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-7.618 3.040L4 14.5c0 5.039 4.041 9.124 9.07 9.477a11.956 11.956 0 005.474-9.477l-.946-8.516z"></path></svg>
-                    签证到期助手
-                </h2>
-                <div class="space-y-4">
-                    <select id="vType" class="w-full p-4 bg-slate-50 rounded-2xl border-0 font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
-                        <option value="30">旅游签 (30天)</option>
-                        <option value="60">旅游签 (60天)</option>
-                        <option value="365">9G 工签 (1年)</option>
-                    </select>
-                    <input type="date" id="vDate" class="w-full p-4 bg-slate-50 rounded-2xl border-0 font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
-                    <button onclick="calcVisa()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition-all">计算截止日期</button>
-                    <div id="vResult" class="hidden p-5 rounded-2xl bg-slate-900 text-white text-sm"></div>
-                </div>
-            </div>
+    <div class="bg-amber-50 border-b border-amber-100 py-2 overflow-hidden whitespace-nowrap relative">
+        <div class="inline-block animate-scroll hover:[animation-play-state:paused] cursor-pointer">
+            <span class="text-amber-700 text-xs font-bold mx-8">💡 2026 换汇贴士：建议周二至周四进行大额换汇，周末汇率波动剧烈。</span>
+            <span class="text-amber-700 text-xs font-bold mx-8">⚠️ 办事提醒：近期移民局对 ECC 审核严格，请至少提前 5 个工作日办理。</span>
+            <span class="text-amber-700 text-xs font-bold mx-8">🚗 交通建议：Grab 加价高峰为 16:00 - 20:00，请尽量错峰出行。</span>
         </div>
+    </div>
 
-        <!-- 第二部分：办事指南 (宽屏双列) -->
-        <div class="space-y-6">
-            <h2 class="font-bold text-slate-800 px-1 text-xl flex items-center gap-2">
-                <svg class="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                核心办事处指南
+    <main class="container mx-auto px-4 mt-6 max-w-6xl space-y-6">
+
+        <section class="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-200">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-bold text-slate-800 flex items-center gap-2 text-lg">
+                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                    实时汇率计算
+                </h2>
+                <div onclick="fetchRate(true)" class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-xl border border-slate-100 shadow-inner cursor-pointer active:scale-95 transition-all">
+                    <span id="status-dot" class="w-2 h-2 rounded-full bg-slate-300"></span>
+                    <span id="rate-time" class="text-[10px] text-slate-500 font-bold tracking-tight">同步中...</span>
+                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="p-5 bg-slate-50 rounded-3xl border border-slate-100">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block ml-1">我有人民币 CNY</label>
+                    <div class="relative flex items-center">
+                        <input type="number" id="cnyInput" placeholder="输入金额" class="w-full bg-transparent text-3xl font-black focus:outline-none pr-12">
+                        <span class="absolute right-0 text-slate-300 font-bold text-xl">¥</span>
+                    </div>
+                    <div class="mt-4 flex gap-2 overflow-x-auto no-scrollbar py-1 snap-x">
+                        <button onclick="quickSet(1000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥1k</button>
+                        <button onclick="quickSet(5000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥5k</button>
+                        <button onclick="quickSet(10000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥1w</button>
+                        <button onclick="quickSet(50000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥5w</button>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-200/50 flex justify-between items-center text-blue-600">
+                        <span class="text-xs font-bold italic text-slate-500">换得比索约 (损耗后)：</span>
+                        <span class="text-2xl font-black">₱ <span id="phpResult">0.00</span></span>
+                    </div>
+                </div>
+
+                <div class="p-5 bg-blue-50/50 rounded-3xl border border-blue-100">
+                    <label class="text-[10px] font-bold text-blue-400 uppercase mb-2 block ml-1">我有比索 PHP</label>
+                    <div class="relative flex items-center">
+                        <input type="number" id="phpInput" placeholder="输入金额" class="w-full bg-transparent text-3xl font-black focus:outline-none pr-12 text-blue-900">
+                        <span class="absolute right-0 text-blue-200 font-bold text-xl">₱</span>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-blue-200/30 flex justify-between items-center text-slate-600">
+                        <span class="text-xs font-bold italic text-slate-400">换回人民币约：</span>
+                        <span class="text-2xl font-black text-slate-800">¥ <span id="cnyResult">0.00</span></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-200">
+            <h2 class="font-bold text-slate-800 mb-6 flex items-center gap-2 text-lg">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-7.618 3.040L4 14.5c0 5.039 4.041 9.124 9.07 9.477a11.956 11.956 0 005.474-9.477l-.946-8.516z"></path></svg>
+                签证到期助手
             </h2>
-            <div id="locList" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- 动态生成 -->
+            <div class="space-y-4">
+                <select id="vType" class="w-full p-4 bg-slate-50 rounded-2xl border-0 font-bold focus:ring-2 focus:ring-blue-500 outline-none appearance-none">
+                    <option value="30">旅游签续签 (30天)</option>
+                    <option value="60">旅游签续签 (60天)</option>
+                    <option value="365">9G工签/学签 (1年审)</option>
+                </select>
+                <input type="date" id="vDate" class="w-full p-4 bg-slate-50 rounded-2xl border-0 font-bold focus:ring-2 focus:ring-blue-500 outline-none">
+                <button onclick="calcVisa()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black hover:bg-slate-800 active:scale-95 transition-all">计算到期日</button>
+                <div id="vResult" class="hidden p-6 rounded-[2rem] bg-blue-600 text-white shadow-xl shadow-blue-100"></div>
             </div>
-        </div>
+        </section>
 
-        <!-- 第三部分：底部变现位 -->
-        <div class="bg-slate-900 p-10 rounded-[2.5rem] text-center cursor-pointer hover:bg-slate-800 transition-all" onclick="window.open('tg://resolve?domain=PH_ONE_COM')">
-            <div class="text-blue-400 font-bold text-xl mb-2">✨ 商务合作：签证、租房、换汇 ✨</div>
-            <div class="text-slate-500 text-xs tracking-widest uppercase">TELEGRAM: @PH_ONE_COM</div>
-        </div>
+        <section class="space-y-6">
+            <h2 class="font-bold text-slate-800 px-1 text-xl">📍 核心办事处指南</h2>
+            <div id="locList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <footer onclick="copyAndGo()" class="bg-slate-900 p-8 rounded-[3rem] text-center cursor-pointer hover:bg-slate-800 transition-all group relative overflow-hidden shadow-2xl">
+            <div id="copyTip" class="absolute inset-0 bg-blue-600 flex items-center justify-center text-white font-bold opacity-0 transition-opacity">
+                ✅ 已复制 @ph_one_com 并跳转
+            </div>
+            <div class="text-blue-400 font-black text-xl mb-1 group-hover:scale-105 transition-transform">✨ 商务合作 / 签证换汇 ✨</div>
+            <p class="text-slate-500 text-[10px] tracking-widest uppercase font-bold">TELEGRAM: @ph_one_com (点击复制联系)</p>
+        </footer>
 
     </main>
 
     <script>
-        // --- 1. 配置与状态 ---
-        const apiUrl = `https://v6.exchangerate-api.com/v6/399e540da4a9ea6038a02bc5/latest/CNY`;
-        let currentRate = 8.72; // 官汇
-        const LOSS_RATE = 0.985; // 市场损耗 (1.5%)
+        // --- 逻辑与之前版本保持一致 ---
+        let currentRate = 8.70;
+        const LOSS_RATE = 0.985;
+        const CACHE_KEY = 'ph1_final_cache';
+        const CACHE_TIME = 3600000;
 
-        // --- 2. 核心汇率逻辑 ---
-        async function updateLiveRate() {
+        const locations = [{ name: "移民局总局 (BI Main Office)", addr: "Magallanes Dr, Intramuros, Manila", mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+Main+Office+Intramuros", grab: "350-500", tips: "禁拖鞋短裤。建议早7点到场。办ECC务必提前3天。" }, { name: "移民局 BGC 分局 (SM Aura)", addr: "8th Floor, SM Aura Tower, Taguig", mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+SM+Aura", grab: "150-300", tips: "环境极佳。仅限简单续签，不受理工签降签业务。" }, { name: "DFA 外交部总局 (ASEANA)", addr: "Aseana Business Park, Parañaque", mapUrl: "https://www.google.com/maps/search/?api=1&query=DFA+Aseana+Consular+Office", grab: "400-600", tips: "必须持打印好的预约单。现场不接受Walk-in。" }, { name: "NBI 办事处 (UN Ave)", addr: "650 UN Ave, Ermita, Manila", mapUrl: "https://www.google.com/maps/search/?api=1&query=NBI+Clearance+Center+UN+Ave", grab: "200-400", tips: "姓名重名(HIT)需等10天。建议穿深色有领衣服拍摄。" }, { name: "LTO 运输署总局 (驾照业务)", addr: "LTO Compound, East Ave, Quezon City", mapUrl: "https://www.google.com/maps/search/?api=1&query=LTO+Main+Office+East+Ave", grab: "400-600", tips: "严禁背心短裤。务必先注册LTMS账号。无视门外所有伸手搭讪的‘中介’。" }, { name: "PSA 统计局 (出生/结婚证)", addr: "PSA Complex, East Ave, Quezon City", mapUrl: "https://www.google.com/maps/search/?api=1&query=Philippine+Statistics+Authority+East+Ave", grab: "400-600", tips: "需提前在线预约。若不急用，建议去各大SM商场的PSA代办点，环境更舒适。" }, { name: "BIR 税务局总署 (TIN税卡)", addr: "BIR Road, Diliman, Quezon City", mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Internal+Revenue+Main", grab: "350-550", tips: "税卡丢失补办或信息更新首选。下午3点停止放号，请务必赶早。" }];
+        function calcToPhp() {
+            const val = document.getElementById('cnyInput').value;
+            const res = document.getElementById('phpResult');
+            res.innerText = val ? (parseFloat(val) * currentRate * LOSS_RATE).toFixed(2) : "0.00";
+        }
+
+        function calcToCny() {
+            const val = document.getElementById('phpInput').value;
+            const res = document.getElementById('cnyResult');
+            res.innerText = val ? (parseFloat(val) / currentRate * LOSS_RATE).toFixed(2) : "0.00";
+        }
+
+        function quickSet(amt) {
+            document.getElementById('cnyInput').value = amt;
+            calcToPhp();
+            if (window.navigator.vibrate) window.navigator.vibrate(10);
+        }
+
+        async function fetchRate(isForced = false) {
+            const dot = document.getElementById('status-dot');
+            const txt = document.getElementById('rate-time');
+            const display = document.getElementById('php-rate');
+
+            if (isForced) localStorage.removeItem(CACHE_KEY);
+            const cached = localStorage.getItem(CACHE_KEY);
+            const now = Date.now();
+
+            if (cached && !isForced) {
+                const { rate, ts } = JSON.parse(cached);
+                if (now - ts < CACHE_TIME) {
+                    currentRate = rate;
+                    updateUI(rate, ts, "缓存模式");
+                    return;
+                }
+            }
+
+            dot.className = "w-2 h-2 rounded-full bg-blue-500 animate-ping";
+            txt.innerText = "同步中...";
+
             try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
+                const res = await fetch(`https://v6.exchangerate-api.com/v6/399e540da4a9ea6038a02bc5/latest/CNY`);
+                const data = await res.json();
                 if (data.result === "success") {
                     currentRate = data.conversion_rates.PHP;
-                    document.getElementById('php-rate').innerText = currentRate.toFixed(2);
-                    // 触发一次输入框更新，防止汇率跳变
-                    updateCalculations();
+                    localStorage.setItem(CACHE_KEY, JSON.stringify({ rate: currentRate, ts: now }));
+                    updateUI(currentRate, now, "实时同步");
                 }
-            } catch (e) { console.error("汇率获取失败"); }
-        }
-
-        function updateCalculations() {
-            const cnyVal = document.getElementById('cnyInput').value;
-            if (cnyVal) {
-                // 人民币换比索：使用实时汇率 * 损耗
-                document.getElementById('phpOutput').value = (cnyVal * currentRate * LOSS_RATE).toFixed(2);
-            }
-
-            const phpVal = document.getElementById('phpInputReverse').value;
-            if (phpVal) {
-                // 比索换回人民币：通常按官汇直接除，或略高
-                document.getElementById('cnyOutputReverse').value = (phpVal / currentRate).toFixed(2);
+            } catch (e) {
+                updateUI(currentRate, now, "网络异常");
             }
         }
 
-        // 绑定事件
-        document.getElementById('cnyInput').oninput = updateCalculations;
-        document.getElementById('phpInputReverse').oninput = updateCalculations;
+        function updateUI(rate, ts, mode) {
+            const dot = document.getElementById('status-dot');
+            const txt = document.getElementById('rate-time');
+            const display = document.getElementById('php-rate');
+            const timeStr = new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-        // --- 3. 地点数据 (修正 URL) ---
-        const locations = [
-            {
-                name: "移民局总局 (BI Main Office)",
-                addr: "Magallanes Dr, Intramuros, Manila",
-                mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+Main+Office+Intramuros",
-                grab: "350-500",
-                tips: "禁拖鞋短裤。建议早7点到场。办ECC务必提前3天。"
-            },
-            {
-                name: "移民局 BGC 分局 (SM Aura)",
-                addr: "8th Floor, SM Aura Tower, Taguig",
-                mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+SM+Aura",
-                grab: "150-300",
-                tips: "环境极佳。仅限简单续签，不受理工签降签业务。"
-            },
-            {
-                name: "DFA 外交部总局 (ASEANA)",
-                addr: "Aseana Business Park, Parañaque",
-                mapUrl: "https://www.google.com/maps/search/?api=1&query=DFA+Aseana+Consular+Office",
-                grab: "400-600",
-                tips: "必须持打印好的预约单。现场不接受Walk-in。"
-            },
-            {
-                name: "NBI 办事处 (UN Ave)",
-                addr: "650 UN Ave, Ermita, Manila",
-                mapUrl: "https://www.google.com/maps/search/?api=1&query=NBI+Clearance+Center+UN+Ave",
-                grab: "200-400",
-                tips: "姓名重名(HIT)需等10天。建议穿深色有领衣服拍摄。"
-            }, {
-                name: "LTO 运输署总局 (驾照业务)",
-                addr: "LTO Compound, East Ave, Quezon City",
-                mapUrl: "https://www.google.com/maps/search/?api=1&query=LTO+Main+Office+East+Ave",
-                grab: "400-600",
-                tips: "严禁背心短裤。务必先注册LTMS账号。无视门外所有伸手搭讪的‘中介’。"
-            },
-            {
-                name: "PSA 统计局 (出生/结婚证)",
-                addr: "PSA Complex, East Ave, Quezon City",
-                mapUrl: "https://www.google.com/maps/search/?api=1&query=Philippine+Statistics+Authority+East+Ave",
-                grab: "400-600",
-                tips: "需提前在线预约。若不急用，建议去各大SM商场的PSA代办点，环境更舒适。"
-            },
-            {
-                name: "BIR 税务局总署 (TIN税卡)",
-                addr: "BIR Road, Diliman, Quezon City",
-                mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Internal+Revenue+Main",
-                grab: "350-550",
-                tips: "税卡丢失补办或信息更新首选。下午3点停止放号，请务必赶早。"
-            }
-        ];
+            display.innerText = rate.toFixed(2);
+            txt.innerText = `${mode} ${timeStr}`;
 
-        // 渲染列表 (保持你原来的代码逻辑)
-        document.getElementById('locList').innerHTML = locations.map(loc => `
-        <div class="bg-white p-7 rounded-[2rem] card-shadow border border-slate-100 hover:border-blue-200 transition-all">
-            <h3 class="font-bold text-slate-800 text-base mb-2">${loc.name}</h3>
-            <p class="text-[12px] text-slate-400 mb-1">📍 ${loc.addr}</p>
-            <p class="text-[12px] text-slate-500 mb-4">🚗 Grab预估: <span class="font-bold text-slate-700">₱${loc.grab}</span></p>
-            <a href="${loc.mapUrl}" target="_blank" class="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition-colors mb-4">
-                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
-                在 Google 地图中查看
-            </a>
-            <div class="p-4 bg-rose-50 rounded-2xl text-[12px] text-rose-700 leading-relaxed border-l-4 border-rose-400">
-                <strong>💡 办事避坑：</strong>${loc.tips}
-            </div>
-        </div>`).join('');
+            if (mode === "实时同步") dot.className = "w-2 h-2 rounded-full bg-green-500";
+            else if (mode === "缓存模式") dot.className = "w-2 h-2 rounded-full bg-slate-400";
+            else dot.className = "w-2 h-2 rounded-full bg-orange-500 animate-pulse";
 
-        // --- 4. 签证逻辑 ---
+            calcToPhp();
+            calcToCny();
+        }
+
         function calcVisa() {
-            const dateInput = document.getElementById('vDate').value;
+            const d = document.getElementById('vDate').value;
             const days = parseInt(document.getElementById('vType').value);
-            if (!dateInput) return alert("请选择日期");
-
-            const startDate = new Date(dateInput);
-            const expDate = new Date(startDate);
-            expDate.setDate(startDate.getDate() + days);
-
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const diffTime = expDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
+            if (!d) return alert("请先选择日期");
+            const exp = new Date(d);
+            exp.setDate(exp.getDate() + days);
+            const diff = Math.ceil((exp - new Date().setHours(0, 0, 0, 0)) / 86400000);
             const res = document.getElementById('vResult');
             res.classList.remove('hidden');
             res.innerHTML = `
-            <div class="font-bold text-blue-400 mb-1 uppercase tracking-tighter">建议截止日期</div>
-            <div class="text-xl font-bold">${expDate.toLocaleDateString('zh-CN')}</div>
-            <div class="${diffDays < 7 ? 'text-red-400 animate-pulse font-bold' : 'text-blue-200'}">
-                ${diffDays < 0 ? '已过期 ' + Math.abs(diffDays) : '剩余有效期：' + diffDays} 天
-            </div>
-        `;
+                <div class="text-[10px] opacity-80 mb-1 tracking-widest font-bold uppercase">建议截止日期</div>
+                <div class="text-3xl font-black mb-1">${exp.toLocaleDateString('zh-CN')}</div>
+                <div class="text-sm font-bold ${diff < 7 ? 'bg-white/20 p-1 rounded inline-block animate-pulse' : ''}">
+                    ${diff < 0 ? '❌ 已过期 ' + Math.abs(diff) + ' 天' : '✅ 剩余有效：' + diff + ' 天'}
+                </div>
+            `;
         }
 
-        // 初始化
-        updateLiveRate();
-        setInterval(updateLiveRate, 3600000);
         function copyAndGo() {
             const tgId = "ph_one_com";
             const tip = document.getElementById('copyTip');
-
-            // 1. 执行复制逻辑
-            const tempInput = document.createElement("input");
-            tempInput.value = tgId;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            try {
-                document.execCommand("copy");
-                // 显示反馈动画
+            navigator.clipboard.writeText(tgId).then(() => {
                 tip.classList.remove('opacity-0');
-                tip.classList.add('opacity-100');
-
-                // 2. 延时跳转，确保用户看到了“已复制”提示
                 setTimeout(() => {
-                    tip.classList.remove('opacity-100');
                     tip.classList.add('opacity-0');
                     window.open(`tg://resolve?domain=${tgId}`, '_blank');
                 }, 800);
-            } catch (err) {
-                // 退级方案：直接跳转
-                window.open(`tg://resolve?domain=${tgId}`, '_blank');
-            }
-            document.body.removeChild(tempInput);
+            });
         }
-    </script>
 
+        window.onload = function () {
+            document.getElementById('cnyInput').addEventListener('input', calcToPhp);
+            document.getElementById('phpInput').addEventListener('input', calcToCny);
+            document.getElementById('locList').innerHTML = locations.map(loc => `
+                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                    <h3 class="font-bold text-slate-800 mb-1">${loc.name}</h3>
+                    <p class="text-[11px] text-slate-400 mb-3 flex items-center gap-1">📍 ${loc.addr}</p>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-[10px] text-slate-500 font-bold tracking-tight">Grab: ₱${loc.grab}</span>
+                        <a href="${loc.mapUrl}" target="_blank" class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-xl text-[10px] font-bold">查看地图</a>
+                    </div>
+                    <div class="p-3 bg-rose-50 rounded-xl text-[11px] text-rose-700 border-l-4 border-rose-400">
+                        <strong>避坑指南：</strong>${loc.tips}
+                    </div>
+                </div>
+            `).join('');
+            fetchRate();
+        };
+    </script>
 </body>
 </html>
