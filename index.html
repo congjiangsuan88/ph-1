@@ -175,35 +175,38 @@
             document.getElementById('cnyOutputReverse').value = (val / baseRate).toFixed(2);
         };
 
-       const locations = [
+const locations = [
     { 
         name: "移民局总局 (BI Main Office)", 
         addr: "Magallanes Dr, Intramuros, Manila", 
-        // 关键：使用 Google Maps 的搜索协议链接
-        mapUrl: "https://www.google.com",
+        // 修正为 Intramuros 总局精确坐标
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+Main+Office+Intramuros",
         grab: "350-500", 
         tips: "禁拖鞋短裤。建议早7点到场。办ECC务必提前3天。" 
     },
     { 
         name: "移民局 BGC 分局 (SM Aura)", 
         addr: "8th Floor, SM Aura Tower, Taguig", 
-        mapUrl: "https://www.google.com",
+        // 修正为 SM Aura Tower 8楼位置
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+SM+Aura+Tower",
         grab: "150-300", 
         tips: "环境极佳。仅限简单续签，不受理工签降签业务。" 
     },
     { 
         name: "DFA 外交部总局 (ASEANA)", 
         addr: "Aseana Business Park, Parañaque", 
-        mapUrl: "https://www.google.com",
+        // 修正为 ASEANA 领事事务部
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=DFA+Consular+Affairs+Aseana",
         grab: "400-600", 
         tips: "必须持打印好的预约单。现场不接受Walk-in。" 
     },
     { 
         name: "NBI 办事处 (UN Ave)", 
         addr: "650 UN Ave, Ermita, Manila", 
-        mapUrl: "https://www.google.com",
+        // 修正为 UN Ave 的 NBI 清理中心
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=NBI+Clearance+Center+UN+Avenue",
         grab: "200-400", 
-        tips: "姓名重名(HIT)需等10天。建议穿深色有领衣服。" 
+        tips: "姓名重名(HIT)需等10天。建议穿深色有领衣服拍摄。" 
     }
 ];
 
