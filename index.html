@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 基础 SEO 优化 -->
+	<title>在菲生活助手 - 2026菲律宾汇率换算、签证续签提醒及办事指南</title>
+	<meta name="description" content="专为在菲华人打造的一站式工具。提供实时比索汇率计算（含市场损耗）、旅游签/9G工签到期提醒、移民局/DFA/NBI办事指南及本地避坑贴士。">
+	<meta name="keywords" content="菲律宾汇率,比索换算,菲律宾签证续签,移民局地址,马尼拉生活助手,菲律宾办事避坑">
+
+	<!-- 针对移动端谷歌搜索的优化 -->
+	<link rel="canonical" href="https://ph-1.com" />
+	<meta name="robots" content="index, follow">
+
+    <!-- 使用 Tailwind CDN 处理样式 -->
+   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	  
+    <style>
+        /* 字体平滑优化 */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .card-shadow { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12 text-slate-900">
+
+    <!-- 导航栏 -->
+    <nav class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto flex justify-between items-center max-w-6xl">
+            <div class="flex items-center gap-2 font-bold text-lg">
+                <span class="text-xl">🇵🇭</span> 在菲生活助手
+            </div>
+            <div class="text-[10px] bg-slate-800 px-3 py-1.5 rounded border border-slate-700 font-medium">
+                官汇：1 CNY ≈ <span id="php-rate" class="text-yellow-400 font-bold">8.50</span> PHP
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 mt-8 max-w-6xl space-y-8">
+
+        <!-- 第一部分：功能区 (电脑端并排) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- 1. 双向汇率换算 -->
+            <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-200">
+                <h2 class="font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <!-- SVG 图标代替 FontAwesome -->
+                    <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                    汇率换算 (含损耗)
+                </h2>
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="flex-1">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">人民币 CNY</label>
+                            <input type="number" id="cnyInput" placeholder="¥ 0.00" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl text-xl font-bold focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div class="flex-1">
+                            <label class="text-[10px] font-bold text-blue-500 uppercase mb-2 block">到手 PHP</label>
+                            <input type="number" id="phpOutput" readonly class="w-full p-4 bg-blue-50 border border-blue-100 rounded-2xl text-xl font-bold text-blue-700 outline-none">
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 border-t pt-4">
+                        <div class="flex-1">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">比索 PHP</label>
+                            <input type="number" id="phpInputReverse" placeholder="₱ 0.00" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl text-xl font-bold focus:ring-2 focus:ring-orange-500 outline-none">
+                        </div>
+                        <div class="flex-1">
+                            <label class="text-[10px] font-bold text-orange-500 uppercase mb-2 block">折合 CNY</label>
+                            <input type="number" id="cnyOutputReverse" readonly class="w-full p-4 bg-orange-50 border border-orange-100 rounded-2xl text-xl font-bold text-orange-700 outline-none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 签证提醒 -->
+            <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-200">
+                <h2 class="font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-7.618 3.040L4 14.5c0 5.039 4.041 9.124 9.07 9.477a11.956 11.956 0 005.474-9.477l-.946-8.516z"></path></svg>
+                    签证到期助手
+                </h2>
+                <div class="space-y-4">
+                    <select id="vType" class="w-full p-4 bg-slate-50 rounded-2xl border-0 font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="30">旅游签 (30天)</option>
+                        <option value="60">旅游签 (60天)</option>
+                        <option value="365">9G 工签 (1年)</option>
+                    </select>
+                    <input type="date" id="vDate" class="w-full p-4 bg-slate-50 rounded-2xl border-0 font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
+                    <button onclick="calcVisa()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition-all">计算截止日期</button>
+                    <div id="vResult" class="hidden p-5 rounded-2xl bg-slate-900 text-white text-sm"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二部分：办事指南 (宽屏双列) -->
+        <div class="space-y-6">
+            <h2 class="font-bold text-slate-800 px-1 text-xl flex items-center gap-2">
+                <svg class="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                核心办事处指南
+            </h2>
+            <div id="locList" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 第三部分：底部变现位 -->
+        <div class="bg-slate-900 p-10 rounded-[2.5rem] text-center cursor-pointer hover:bg-slate-800 transition-all" onclick="window.open('tg://resolve?domain=ph_one_com')">
+            <div class="text-blue-400 font-bold text-xl mb-2">✨ 商务合作：签证、租房、换汇 ✨</div>
+            <div class="text-slate-500 text-xs tracking-widest uppercase">TELEGRAM: @ph_one_com</div>
+        </div>
+		
+		<!-- SEO 文本区块 -->
+		<section class="mt-12 border-t border-slate-200 pt-8 text-slate-500 text-sm leading-relaxed">
+		<h1 class="text-slate-800 font-bold mb-4 text-base">2026 菲律宾生活与办事全攻略：汇率、签证与避坑贴士</h1>
+		<p class="mb-4">
+			欢迎使用<b>在菲生活助手</b>，我们致力于为在马尼拉及全菲华人群体提供最精准的实用工具。随着 2026 年菲律宾经济波动，<b>比索汇率 (PHP)</b> 对人民币 (CNY) 的走势成为大家关注的焦点。由于马尼拉各大银行（如 BDO, BPI）与线下换汇点（钱庄）存在价差，本站提供的<b>实时汇率换算器</b>特别计入了市场损耗，助您掌握最真实的到手价格。
+		</p>
+		<p class="mb-4">
+			在菲律宾长期居留，<b>签证续签</b>是头等大事。无论是初抵境的旅游签续签，还是 9G 工签、SRRV 退休签的年度审核（Annual Report），错过截止日期将面临高额罚款甚至黑名单风险。我们的<b>签证到期提醒工具</b>支持多类型算法，建议您至少提前 7 个工作日办理相关业务，避开菲律宾繁多的公众假期。
+		</p>
+		<p>
+			前往<b>菲律宾移民局总局 (BI)</b>、外交部 (DFA) 或 NBI 办事时，务必注意本地化细节：严禁穿着短裤拖鞋入内，且多数部门需提前在线预约。马尼拉交通拥堵严重，使用 <b>Grab</b> 出行时建议避开下午 4 点后的高峰期。本站整理的办事处指南包含最新的<b>避坑贴士</b>，旨在帮您节省时间，远离不必要的麻烦。
+		</p>
+</section>
+
+    </main>
+
+    <script>
+        var baseRate = 8.5; 
+        var marketRate = baseRate * 0.985; 
+
+        // 1. 汇率逻辑
+        document.getElementById('cnyInput').oninput = function() {
+            const val = this.value || 0;
+            document.getElementById('phpOutput').value = (val * marketRate).toFixed(2);
+        };
+        document.getElementById('phpInputReverse').oninput = function() {
+            const val = this.value || 0;
+            document.getElementById('cnyOutputReverse').value = (val / baseRate).toFixed(2);
+        };
+
+        // C. 地址数据
+        const locations = [
+            { name: "移民局总局 (BI Main)", tags: ["续签", "ECC"], addr: "Intramuros, Manila", grab: "350-500", tips: "严禁拖鞋、短裤。建议早7点到场。下午3点停止发号。" },
+            { name: "移民局分局 (BGC SM Aura)", tags: ["人少", "环境好"], addr: "8F, SM Aura, Taguig", grab: "150-300", tips: "环境极佳。仅限简单续签，不受理工签降签。" },
+            { name: "DFA 外交部总局", tags: ["护照补办", "海牙"], addr: "Aseana, Parañaque", grab: "400-600", tips: "必须带打印好的预约单。现场不接受Walk-in。补办护照流程慢。" },
+            { name: "NBI 办事处 (UN Ave)", tags: ["无犯罪证明"], addr: "Ermita, Manila", grab: "200-400", tips: "办无犯罪证明。姓名重名(HIT)需等10天。穿深色有领衣服拍照。" },
+            { name: "LTO 陆运署总局", tags: ["驾照", "车牌"], addr: "East Ave, Quezon City", grab: "500-800", tips: "考/换驾照。体检需在指定诊所。避开周边主动搭讪的黄牛。" },
+            { name: "奎松中国城 (Banawe)", tags: ["修车", "中医"], addr: "Banawe St, Quezon City", grab: "400-600", tips: "老华区，修车、买配件、看老中医首选。注意询问多家比价。" }
+        ];
+
+        document.getElementById('locList').innerHTML = locations.map(loc => `
+            <div class="bg-white p-7 rounded-[2rem] card-shadow border border-slate-100 hover:border-blue-200 transition-all">
+                <h3 class="font-bold text-slate-800 text-base mb-2">${loc.name}</h3>
+                <p class="text-[12px] text-slate-400 mb-1">📍 ${loc.addr}</p>
+                <p class="text-[12px] text-slate-500 mb-4">🚗 Grab预估: <span class="font-bold text-slate-700">₱${loc.grab}</span></p>
+                <div class="p-4 bg-rose-50 rounded-2xl text-[12px] text-rose-700 leading-relaxed border-l-4 border-rose-400">
+                    <strong>💡 避坑贴士：</strong>${loc.tips}
+                </div>
+            </div>`).join('');
+
+        // 3. 签证逻辑
+        function calcVisa() {
+            const date = document.getElementById('vDate').value;
+            const days = parseInt(document.getElementById('vType').value);
+            if(!date) return alert("请选择日期");
+            const exp = new Date(date); exp.setDate(exp.getDate() + days);
+            const diff = Math.ceil((exp - new Date()) / 86400000);
+            const res = document.getElementById('vResult');
+            res.classList.remove('hidden');
+            res.innerHTML = `
+                <div class="font-bold text-blue-400 mb-1 uppercase tracking-tighter">建议截止日期</div>
+                <div class="text-xl font-bold">${exp.toLocaleDateString()}</div>
+                <div class="${diff < 7 ? 'text-red-400 animate-pulse' : 'text-blue-200'}">剩余有效期：${diff} 天</div>
+            `;
+        }
+    </script>
+</body>
+</html>
+
+	
+	<script>
+	const apiUrl = `https://v6.exchangerate-api.com/v6/399e540da4a9ea6038a02bc5/latest/CNY`;
+	// 默认初始汇率（防止接口失效时的备用值）
+	let currentRate = 7.85; 
+
+	// 2. 核心函数：自动获取汇率
+	async function updateLiveRate() {
+		try {
+			const response = await fetch(apiUrl);
+			const data = await response.json();
+			
+			if (data.result === "success") {
+				// 获取 PHP 兑 CNY 的实时汇率
+				currentRate = data.conversion_rates.PHP;
+				
+				// A. 更新导航栏显示的数字
+				document.getElementById('php-rate').innerText = currentRate.toFixed(2);
+				
+				// B. 更新每日播报条（如果有这个 ID）
+				const broadcastRate = document.getElementById('broadcast-rate');
+				if(broadcastRate) broadcastRate.innerText = currentRate.toFixed(2);
+				
+				// C. 更新黑市/市场参考价 (通常比官汇低 1.5% - 2%)
+				const marketRef = document.getElementById('market-rate-val');
+				if(marketRef) marketRef.innerText = (currentRate * 0.982).toFixed(2);
+				baseRate=currentRate;
+				console.log(`汇率更新成功: ${currentRate}`);
+			}
+		} catch (error) {
+			console.error("无法获取实时汇率，使用默认值", error);
+		}
+	}
+
+	// 3. 实时换算逻辑
+	document.getElementById('cnyInput').addEventListener('input', (e) => {
+		const val = e.target.value;
+		const output = document.getElementById('phpOutput');
+		if (val) {
+			output.value = (val * currentRate).toFixed(2);
+		} else {
+			output.value = "";
+		}
+	});
+
+	// 4. 页面加载时立即执行一次
+	updateLiveRate();
+
+	// 5. 每小时自动刷新一次汇率 (3600000 毫秒)
+	setInterval(updateLiveRate, 3600000);
+
+	</script>
+ 
