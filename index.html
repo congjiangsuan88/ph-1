@@ -24,25 +24,25 @@
         .card-shadow { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05); }
     </style>
 	<script type="application/ld:json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "在菲生活助手",
-  "operatingSystem": "WEB",
-  "applicationCategory": "FinanceApplication, TravelApplication",
-  "description": "提供菲律宾生活所需的实时汇率、签证提醒和政府部门办事指南。",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "PHP"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "1250"
-  }
-}
-</script>
+	{
+	  "@context": "https://schema.org",
+	  "@type": "SoftwareApplication",
+	  "name": "在菲生活助手",
+	  "operatingSystem": "WEB",
+	  "applicationCategory": "FinanceApplication, TravelApplication",
+	  "description": "提供菲律宾生活所需的实时汇率、签证提醒和政府部门办事指南。",
+	  "offers": {
+		"@type": "Offer",
+		"price": "0",
+		"priceCurrency": "PHP"
+	  },
+	  "aggregateRating": {
+		"@type": "AggregateRating",
+		"ratingValue": "4.9",
+		"ratingCount": "1250"
+	  }
+	}
+	</script>
 
 </head>
 <body class="bg-slate-50 min-h-screen pb-12 text-slate-900">
@@ -147,8 +147,8 @@
 
     </main>
 
-    <script>
-        var baseRate = 8.5; 
+ <script>
+        var baseRate = 8.6; 
         var marketRate = baseRate * 0.985; 
 
         // 1. 汇率逻辑
@@ -196,15 +196,12 @@
                 <div class="${diff < 7 ? 'text-red-400 animate-pulse' : 'text-blue-200'}">剩余有效期：${diff} 天</div>
             `;
         }
-    </script>
-</body>
-</html>
-
+</script>
 	
-	<script>
+<script>
 	const apiUrl = `https://v6.exchangerate-api.com/v6/399e540da4a9ea6038a02bc5/latest/CNY`;
 	// 默认初始汇率（防止接口失效时的备用值）
-	let currentRate = 7.85; 
+	let currentRate = 8.726; 
 
 	// 2. 核心函数：自动获取汇率
 	async function updateLiveRate() {
@@ -250,6 +247,8 @@
 
 	// 5. 每小时自动刷新一次汇率 (3600000 毫秒)
 	setInterval(updateLiveRate, 3600000);
+</script>
+</body>
+</html>
 
-	</script>
- 
+	
