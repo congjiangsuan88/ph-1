@@ -160,142 +160,120 @@
 </section>
 
     </main>
-
- <script>
-        var baseRate = 8.6; 
-        var marketRate = baseRate * 0.985; 
-
-        // 1. 汇率逻辑
-        document.getElementById('cnyInput').oninput = function() {
-            const val = this.value || 0;
-            document.getElementById('phpOutput').value = (val * marketRate).toFixed(2);
-        };
-        document.getElementById('phpInputReverse').oninput = function() {
-            const val = this.value || 0;
-            document.getElementById('cnyOutputReverse').value = (val / baseRate).toFixed(2);
-        };
-
-const locations = [
-    { 
-        name: "移民局总局 (BI Main Office)", 
-        addr: "Magallanes Dr, Intramuros, Manila", 
-        // 修正为 Intramuros 总局精确坐标
-        mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+Main+Office+Intramuros",
-        grab: "350-500", 
-        tips: "禁拖鞋短裤。建议早7点到场。办ECC务必提前3天。" 
-    },
-    { 
-        name: "移民局 BGC 分局 (SM Aura)", 
-        addr: "8th Floor, SM Aura Tower, Taguig", 
-        // 修正为 SM Aura Tower 8楼位置
-        mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+SM+Aura+Tower",
-        grab: "150-300", 
-        tips: "环境极佳。仅限简单续签，不受理工签降签业务。" 
-    },
-    { 
-        name: "DFA 外交部总局 (ASEANA)", 
-        addr: "Aseana Business Park, Parañaque", 
-        // 修正为 ASEANA 领事事务部
-        mapUrl: "https://www.google.com/maps/search/?api=1&query=DFA+Consular+Affairs+Aseana",
-        grab: "400-600", 
-        tips: "必须持打印好的预约单。现场不接受Walk-in。" 
-    },
-    { 
-        name: "NBI 办事处 (UN Ave)", 
-        addr: "650 UN Ave, Ermita, Manila", 
-        // 修正为 UN Ave 的 NBI 清理中心
-        mapUrl: "https://www.google.com/maps/search/?api=1&query=NBI+Clearance+Center+UN+Avenue",
-        grab: "200-400", 
-        tips: "姓名重名(HIT)需等10天。建议穿深色有领衣服拍摄。" 
-    }
-];
-
-
-       // 找到你代码中生成卡片的地方，修改如下：
-document.getElementById('locList').innerHTML = locations.map(loc => `
-    <div class="bg-white p-7 rounded-[2rem] card-shadow border border-slate-100 hover:border-blue-200 transition-all">
-        <h3 class="font-bold text-slate-800 text-base mb-2">${loc.name}</h3>
-        <p class="text-[12px] text-slate-400 mb-1">📍 ${loc.addr}</p>
-        <p class="text-[12px] text-slate-500 mb-4">🚗 Grab预估: <span class="font-bold text-slate-700">₱${loc.grab}</span></p>
-        
-        <!-- 新增：一键导航按钮 -->
-        <a href="${loc.mapUrl}" target="_blank" class="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition-colors mb-4">
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
-            立即导航 / 唤起地图
-        </a>
-
-        <div class="p-4 bg-rose-50 rounded-2xl text-[12px] text-rose-700 leading-relaxed border-l-4 border-rose-400">
-            <strong>💡 办事避坑：</strong>${loc.tips}
-        </div>
-    </div>`).join('');
-
-
-        // 3. 签证逻辑
-        function calcVisa() {
-            const date = document.getElementById('vDate').value;
-            const days = parseInt(document.getElementById('vType').value);
-            if(!date) return alert("请选择日期");
-            const exp = new Date(date); exp.setDate(exp.getDate() + days);
-            const diff = Math.ceil((exp - new Date()) / 86400000);
-            const res = document.getElementById('vResult');
-            res.classList.remove('hidden');
-            res.innerHTML = `
-                <div class="font-bold text-blue-400 mb-1 uppercase tracking-tighter">建议截止日期</div>
-                <div class="text-xl font-bold">${exp.toLocaleDateString()}</div>
-                <div class="${diff < 7 ? 'text-red-400 animate-pulse' : 'text-blue-200'}">剩余有效期：${diff} 天</div>
-            `;
-        }
-</script>
-	
 <script>
-	const apiUrl = `https://v6.exchangerate-api.com/v6/399e540da4a9ea6038a02bc5/latest/CNY`;
-	// 默认初始汇率（防止接口失效时的备用值）
-	let currentRate = 8.726; 
+    // --- 1. 配置与状态 ---
+    const apiUrl = `https://v6.exchangerate-api.com/v6/399e540da4a9ea6038a02bc5/latest/CNY`;
+    let currentRate = 8.72; // 官汇
+    const LOSS_RATE = 0.985; // 市场损耗 (1.5%)
 
-	// 2. 核心函数：自动获取汇率
-	async function updateLiveRate() {
-		try {
-			const response = await fetch(apiUrl);
-			const data = await response.json();
-			
-			if (data.result === "success") {
-				// 获取 PHP 兑 CNY 的实时汇率
-				currentRate = data.conversion_rates.PHP;
-				
-				// A. 更新导航栏显示的数字
-				document.getElementById('php-rate').innerText = currentRate.toFixed(2);
-				
-				// B. 更新每日播报条（如果有这个 ID）
-				const broadcastRate = document.getElementById('broadcast-rate');
-				if(broadcastRate) broadcastRate.innerText = currentRate.toFixed(2);
-				
-				// C. 更新黑市/市场参考价 (通常比官汇低 1.5% - 2%)
-				const marketRef = document.getElementById('market-rate-val');
-				if(marketRef) marketRef.innerText = (currentRate * 0.982).toFixed(2);
-				baseRate=currentRate;
-				console.log(`汇率更新成功: ${currentRate}`);
-			}
-		} catch (error) {
-			console.error("无法获取实时汇率，使用默认值", error);
-		}
-	}
+    // --- 2. 核心汇率逻辑 ---
+    async function updateLiveRate() {
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            if (data.result === "success") {
+                currentRate = data.conversion_rates.PHP;
+                document.getElementById('php-rate').innerText = currentRate.toFixed(2);
+                // 触发一次输入框更新，防止汇率跳变
+                updateCalculations();
+            }
+        } catch (e) { console.error("汇率获取失败"); }
+    }
 
-	// 3. 实时换算逻辑
-	document.getElementById('cnyInput').addEventListener('input', (e) => {
-		const val = e.target.value;
-		const output = document.getElementById('phpOutput');
-		if (val) {
-			output.value = (val * currentRate).toFixed(2);
-		} else {
-			output.value = "";
-		}
-	});
+    function updateCalculations() {
+        const cnyVal = document.getElementById('cnyInput').value;
+        if(cnyVal) {
+            // 人民币换比索：使用实时汇率 * 损耗
+            document.getElementById('phpOutput').value = (cnyVal * currentRate * LOSS_RATE).toFixed(2);
+        }
+        
+        const phpVal = document.getElementById('phpInputReverse').value;
+        if(phpVal) {
+            // 比索换回人民币：通常按官汇直接除，或略高
+            document.getElementById('cnyOutputReverse').value = (phpVal / currentRate).toFixed(2);
+        }
+    }
 
-	// 4. 页面加载时立即执行一次
-	updateLiveRate();
+    // 绑定事件
+    document.getElementById('cnyInput').oninput = updateCalculations;
+    document.getElementById('phpInputReverse').oninput = updateCalculations;
 
-	// 5. 每小时自动刷新一次汇率 (3600000 毫秒)
-	setInterval(updateLiveRate, 3600000);
+    // --- 3. 地点数据 (修正 URL) ---
+    const locations = [
+        { 
+            name: "移民局总局 (BI Main Office)", 
+            addr: "Magallanes Dr, Intramuros, Manila", 
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+Main+Office+Intramuros",
+            grab: "350-500", 
+            tips: "禁拖鞋短裤。建议早7点到场。办ECC务必提前3天。" 
+        },
+        { 
+            name: "移民局 BGC 分局 (SM Aura)", 
+            addr: "8th Floor, SM Aura Tower, Taguig", 
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+SM+Aura",
+            grab: "150-300", 
+            tips: "环境极佳。仅限简单续签，不受理工签降签业务。" 
+        },
+        { 
+            name: "DFA 外交部总局 (ASEANA)", 
+            addr: "Aseana Business Park, Parañaque", 
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=DFA+Aseana+Consular+Office",
+            grab: "400-600", 
+            tips: "必须持打印好的预约单。现场不接受Walk-in。" 
+        },
+        { 
+            name: "NBI 办事处 (UN Ave)", 
+            addr: "650 UN Ave, Ermita, Manila", 
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=NBI+Clearance+Center+UN+Ave",
+            grab: "200-400", 
+            tips: "姓名重名(HIT)需等10天。建议穿深色有领衣服拍摄。" 
+        }
+    ];
+
+    // 渲染列表 (保持你原来的代码逻辑)
+    document.getElementById('locList').innerHTML = locations.map(loc => `
+        <div class="bg-white p-7 rounded-[2rem] card-shadow border border-slate-100 hover:border-blue-200 transition-all">
+            <h3 class="font-bold text-slate-800 text-base mb-2">${loc.name}</h3>
+            <p class="text-[12px] text-slate-400 mb-1">📍 ${loc.addr}</p>
+            <p class="text-[12px] text-slate-500 mb-4">🚗 Grab预估: <span class="font-bold text-slate-700">₱${loc.grab}</span></p>
+            <a href="${loc.mapUrl}" target="_blank" class="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition-colors mb-4">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                在 Google 地图中查看
+            </a>
+            <div class="p-4 bg-rose-50 rounded-2xl text-[12px] text-rose-700 leading-relaxed border-l-4 border-rose-400">
+                <strong>💡 办事避坑：</strong>${loc.tips}
+            </div>
+        </div>`).join('');
+
+    // --- 4. 签证逻辑 ---
+    function calcVisa() {
+        const dateInput = document.getElementById('vDate').value;
+        const days = parseInt(document.getElementById('vType').value);
+        if(!dateInput) return alert("请选择日期");
+
+        const startDate = new Date(dateInput);
+        const expDate = new Date(startDate);
+        expDate.setDate(startDate.getDate() + days);
+
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const diffTime = expDate - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        const res = document.getElementById('vResult');
+        res.classList.remove('hidden');
+        res.innerHTML = `
+            <div class="font-bold text-blue-400 mb-1 uppercase tracking-tighter">建议截止日期</div>
+            <div class="text-xl font-bold">${expDate.toLocaleDateString('zh-CN')}</div>
+            <div class="${diffDays < 7 ? 'text-red-400 animate-pulse font-bold' : 'text-blue-200'}">
+                ${diffDays < 0 ? '已过期 ' + Math.abs(diffDays) : '剩余有效期：' + diffDays} 天
+            </div>
+        `;
+    }
+
+    // 初始化
+    updateLiveRate();
+    setInterval(updateLiveRate, 3600000);
 </script>
 </body>
 </html>
