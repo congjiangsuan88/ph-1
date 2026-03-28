@@ -328,7 +328,7 @@
                     <span class="text-3xl">🇵🇭</span>
                     <span class="text-2xl font-black tracking-tighter">PH-1 <span class="text-blue-500">菲华助手</span></span>
                 </div>
-                 
+
             </div>
 
             <div class="max-w-2xl mx-auto mb-12">
@@ -514,22 +514,7 @@
                 console.log('分享取消或失败:', err);
             }
         }
-           window.voteStatus = (locName, status) => {
-            // 关键：清理掉名称中的非法字符（Firebase key 限制）
-            const safeKey = locName.replace(/[.#$/[\]]/g, "_");
-            const voteRef = ref(db, `votes/${safeKey}/${status}`);
 
-            // 使用 runTransaction 确保并发安全
-            runTransaction(voteRef, (currentValue) => {
-                return (currentValue || 0) + 1;
-            }).then(() => {
-                console.log("投票成功:", safeKey, status);
-                alert(`[${locName}] 感谢反馈！`);
-            }).catch((error) => {
-                console.error("投票失败:", error);
-                alert("由于网络或权限原因，反馈暂未提交。");
-            });
-        };
 
         window.onload = function () {
             document.getElementById('cnyInput').oninput = window.calcToPhp;
@@ -546,17 +531,18 @@
                         <strong>避坑指南：</strong>${loc.tips}
                     </div>
                         <div class="grid grid-cols-3 gap-2">
-                        <button onclick="window.voteStatus('${loc.name}', '🏃')" data-vote-for="${loc.name}" data-status="🏃" class="text-[10px] py-2 bg-slate-50 text-slate-600 rounded-xl border border-slate-100 font-bold hover:bg-green-50">🏃</button>
-                        <button onclick="window.voteStatus('${loc.name}', '🚶')" data-vote-for="${loc.name}" data-status="🚶" class="text-[10px] py-2 bg-slate-50 text-slate-600 rounded-xl border border-slate-100 font-bold hover:bg-amber-50">🚶</button>
-                        <button onclick="window.voteStatus('${loc.name}', '🐢')" data-vote-for="${loc.name}" data-status="🐢" class="text-[10px] py-2 bg-slate-50 text-slate-600 rounded-xl border border-slate-100 font-bold hover:bg-rose-50">🐢</button>
+                        <button onclick="window.voteStatus2('${loc.name}', '🏃')" data-vote-for="${loc.name}" data-status="🏃" class="text-[10px] py-2 bg-slate-50 text-slate-600 rounded-xl border border-slate-100 font-bold hover:bg-green-50">🏃</button>
+                        <button onclick="window.voteStatus2('${loc.name}', '🚶')" data-vote-for="${loc.name}" data-status="🚶" class="text-[10px] py-2 bg-slate-50 text-slate-600 rounded-xl border border-slate-100 font-bold hover:bg-amber-50">🚶</button>
+                        <button onclick="window.voteStatus2('${loc.name}', '🐢')" data-vote-for="${loc.name}" data-status="🐢" class="text-[10px] py-2 bg-slate-50 text-slate-600 rounded-xl border border-slate-100 font-bold hover:bg-rose-50">🐢</button>
                     </div>
                 </div>
             `).join('');
             fetchRate();
 
         };
-        import { syncVotes } from '/js/main.js';
+        import { syncVotes, voteStatus } from '/js/main.js';
         syncVotes();
+        window.voteStatus2 = (locName, status) => { voteStatus(locName, status); };
     </script>
 
 </body>
