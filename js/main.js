@@ -11,7 +11,7 @@ const SPAM_WORDS = ["博彩", "点位", "加微", "跑分", "招人", "换汇", 
 let isCoolingDown = false;
 publishBtn.addEventListener("click", async () => {
     if (isCoolingDown) return; // 如果正在冷却，直接返回
-   
+
 
     // publish.js
     const lastPost = localStorage.getItem("last_post_at");
@@ -80,7 +80,7 @@ publishBtn.addEventListener("click", async () => {
 
     }
 });
- 
+
 // 监听投票并动态更新 UI
 export function syncVotes() {
     onValue(ref(db, 'votes'), (snapshot) => {
@@ -93,7 +93,22 @@ export function syncVotes() {
         });
     });
 }
+export function voteStatus(locName, status)   {
+    // 关键：清理掉名称中的非法字符（Firebase key 限制）
+    const safeKey = locName.replace(/[.#$/[\]]/g, "_");
+    const voteRef = ref(db, `votes/${safeKey}/${status}`);
 
+    // 使用 runTransaction 确保并发安全
+    runTransaction(voteRef, (currentValue) => {
+        return (currentValue || 0) + 1;
+    }).then(() => {
+        console.log("投票成功:", safeKey, status);
+        alert(`[${locName}] 感谢反馈！`);
+    }).catch((error) => {
+        console.error("投票失败:", error);
+        alert("由于网络或权限原因，反馈暂未提交。");
+    });
+};
 // 1. 变量准备
 let clickCount = 0;
 let lastClickTime = 0;
