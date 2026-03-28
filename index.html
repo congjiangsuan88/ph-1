@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
     <meta name="description" content="PH-1.com 专为在菲华人打造。提供 2026 实时比索汇率、签证到期自动计算、移民局办事避坑指南，是您在菲律宾生活、工作的必备助手。">
-    <meta name="keywords" content="菲律宾汇率,比索换人民币,菲律宾签证续签,移民局办事指南,马尼拉生活助手,PH-1,菲华助手,PHP to CNY,人民币换比索">
+    <meta name="keywords" content="菲律宾汇率,比索换人民币,菲律宾签证续签,移民局办事指南,马尼拉生活助手,PH-1,菲华助手">
     <meta name="author" content="PH-1.com">
 
     <meta property="og:type" content="website">
@@ -51,18 +51,12 @@
 
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-            -webkit-font-smoothing: antialiased;
+            font-family: -apple-system, system-ui, sans-serif;
             background-color: #f8fafc;
         }
 
         .no-scrollbar::-webkit-scrollbar {
             display: none;
-        }
-
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
         }
 
         @keyframes scroll {
@@ -71,12 +65,116 @@
             }
 
             100% {
-                transform: translateX(-200%);
+                transform: translateX(-250%);
             }
         }
 
         .animate-scroll {
-            animation: scroll 35s linear infinite;
+            animation: scroll 40s linear infinite;
+        }
+
+        /* 1. 回归标准布局 */
+        #commentList {
+            display: block; /* 确保不是 flex-reverse */
+            width: 100%;
+        }
+
+        /* 2. 修复“粘在一起”的问题：强制每条卡片下边距 */
+        .comment-card {
+            display: block;
+            margin-bottom: 1.5rem !important; /* 24px 间距 */
+            animation: slideUp 0.4s ease-out forwards;
+        }
+
+        /* 3. 输入框区域强制置顶感 */
+        .input-area-wrapper {
+            background: white;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f1f5f9;
+            margin-top: 1rem;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* 默认评论不可选，防止误触 */
+        .comment-card {
+            cursor: default;
+        }
+
+        /* 管理模式开启后的样式 */
+        .admin-mode .comment-card {
+            cursor: cell;
+            border: 1px dashed #ef4444 !important; /* 变成红色虚线边框 */
+        }
+
+            .admin-mode .comment-card:hover {
+                background-color: #fee2e2; /* 悬停变淡红色 */
+            }
+        /* 给你的 h2 标题加上这个 */
+        h2[onclick] {
+            user-select: none; /* 禁止选中文本 */
+            -webkit-user-select: none;
+            cursor: default; /* 保持普通指针，不让别人发现它是能点的 */
+        }
+        /* 给标题加一个专门的类名 */
+        .admin-trigger {
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            cursor: default !important;
+            /* 增加一个透明的占位，确保点击区域足够大 */
+            padding: 10px 0;
+        }
+
+        /* 激活管理模式后的样式 */
+        /*.admin-mode .comment-card {
+            border: 2px dashed #ff4d4f !important;
+            cursor: pointer !important;
+        }*/
+        /* 新消息入场的高亮效果 */
+        .new-post-highlight {
+            border: 2px solid #2563eb !important; /* 蓝色边框闪烁 */
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+            animation: pulseHighlight 2s ease-out;
+        }
+
+        @keyframes pulseHighlight {
+            0% {
+                transform: scale(1.02);
+                background-color: #eff6ff;
+            }
+
+            100% {
+                transform: scale(1);
+                background-color: #f8fafc;
+            }
+        }
+
+        /* 输入框为空时的抖动动画 (用于错误反馈) */
+        .animate-shake {
+            animation: shake 0.4s screen;
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
         }
     </style>
 </head>
@@ -111,7 +209,7 @@
                     <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
                     实时汇率计算
                 </h2>
-                <div onclick="fetchRate(true)" class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-xl border border-slate-100 shadow-inner cursor-pointer active:scale-95 transition-all">
+                <div onclick="window.fetchRate(true)" class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-xl border border-slate-100 shadow-inner cursor-pointer active:scale-95 transition-all">
                     <span id="status-dot" class="w-2 h-2 rounded-full bg-slate-300"></span>
                     <span id="rate-time" class="text-[10px] text-slate-500 font-bold tracking-tight">同步中...</span>
                     <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
@@ -126,10 +224,10 @@
                         <span class="absolute right-0 text-slate-300 font-bold text-xl">¥</span>
                     </div>
                     <div class="mt-4 flex gap-2 overflow-x-auto no-scrollbar py-1 snap-x">
-                        <button onclick="quickSet(1000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥1k</button>
-                        <button onclick="quickSet(5000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥5k</button>
-                        <button onclick="quickSet(10000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥1w</button>
-                        <button onclick="quickSet(50000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥5w</button>
+                        <button onclick="window.quickSet(1000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥1k</button>
+                        <button onclick="window.quickSet(5000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥5k</button>
+                        <button onclick="window.quickSet(10000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥1w</button>
+                        <button onclick="window.quickSet(50000)" class="shrink-0 snap-start px-4 py-2 bg-white text-blue-600 text-[11px] font-bold rounded-xl border border-slate-200 active:scale-95 transition-all">+¥5w</button>
                     </div>
                     <div class="mt-4 pt-4 border-t border-slate-200/50 flex justify-between items-center text-blue-600">
                         <span class="text-xs font-bold italic text-slate-500">换得比索约 (损耗后)：</span>
@@ -163,7 +261,7 @@
                     <option value="365">9G工签/学签 (1年审)</option>
                 </select>
                 <input type="date" id="vDate" class="w-full p-4 bg-slate-50 rounded-2xl border-0 font-bold focus:ring-2 focus:ring-blue-500 outline-none">
-                <button onclick="calcVisa()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black hover:bg-slate-800 active:scale-95 transition-all">计算到期日</button>
+                <button onclick="window.calcVisa()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black hover:bg-slate-800 active:scale-95 transition-all">计算到期日</button>
                 <div id="vResult" class="hidden p-6 rounded-[2rem] bg-blue-600 text-white shadow-xl shadow-blue-100"></div>
             </div>
         </section>
@@ -172,8 +270,40 @@
             <h2 class="font-bold text-slate-800 px-1 text-xl">📍 核心办事处指南</h2>
             <div id="locList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
+        <section class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-200 overflow-hidden">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 onclick="window.triggerAdmin()" class="font-black text-slate-800 text-xl cursor-default select-none">
+                        💬 菲华情报站
+                    </h2>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">UGC Community Feed</p>
+                </div>
+                <span class="bg-blue-600 text-white text-[10px] px-3 py-1 rounded-full font-bold shadow-lg shadow-blue-100">实时互动</span>
+            </div>
 
-        <section onclick="copyAndGo()" class="bg-slate-900 p-8 rounded-[3rem] text-center cursor-pointer hover:bg-slate-800 transition-all group relative overflow-hidden shadow-2xl">
+            <section class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-200 mb-10">
+
+
+                <div id="experience-display" class="flex flex-col items-center w-full px-4 space-y-6">
+                </div>
+
+                <div class="flex justify-center py-8">
+                    <button id="load-more-btn" style="display: none;" class="text-slate-400 hover:text-blue-600 text-xs font-medium tracking-widest uppercase py-2 px-4 border border-transparent hover:border-slate-200 rounded transition-all">
+                        ︾ 点击加载更多记录
+                    </button>
+                </div>
+
+                <div class="relative pt-8 border-t border-slate-50">
+                    <input type="text" id="commentInput" maxlength="100" placeholder="分享今天的办事体验..."
+                           class="w-full bg-slate-100 p-5 rounded-[2rem] text-sm outline-none focus:bg-white focus:ring-2 focus:ring-blue-600 transition-all pr-24">
+                    <button id="publish-btn" class="absolute right-2 top-10 bottom-2 bg-slate-900 text-white px-6 rounded-[1.5rem] text-xs font-black">
+                        发布
+                    </button>
+                </div>
+                <div class="safe-bottom"></div>
+            </section>
+        </section>
+        <section onclick="window.copyAndGo()" class="bg-slate-900 p-8 rounded-[3rem] text-center cursor-pointer hover:bg-slate-800 transition-all group relative overflow-hidden shadow-2xl">
             <div id="copyTip" class="absolute inset-0 bg-blue-600 flex items-center justify-center text-white font-bold opacity-0 transition-opacity">
                 ✅ 已复制 @ph_one_com 并跳转
             </div>
@@ -182,7 +312,7 @@
         </section>
 
     </main>
-    <div id="shareBtn" onclick="shareSite()" class="fixed bottom-24 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center cursor-pointer hover:bg-blue-700 active:scale-90 transition-all z-[60] border-4 border-white">
+    <div id="shareBtn" onclick="window.shareSite()" class="fixed bottom-24 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center cursor-pointer hover:bg-blue-700 active:scale-90 transition-all z-[60] border-4 border-white">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
         </svg>
@@ -191,52 +321,73 @@
             <span class="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-[8px] items-center justify-center font-bold">荐</span>
         </span>
     </div>
-    <footer class="mt-12 bg-slate-900 text-slate-400 py-12 px-4">
-        <div class="container mx-auto max-w-6xl">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 border-b border-slate-800 pb-10">
-
-                <div class="space-y-4">
-                    <div class="flex items-center gap-2 text-white font-black text-xl">
-                        <span class="text-2xl">🇵🇭</span> PH-1 <span class="text-blue-400">菲华助手</span>
-                    </div>
-                    <p class="text-sm leading-relaxed">
-                        PH-1.com 是专为在菲华人打造的一站式生活服务平台。我们提供实时的比索(PHP)对人民币(CNY)汇率查询、精细的签证续签提醒以及菲律宾政府部门（移民局、LTO、DFA、PSA）的办事指南。
-                    </p>
+    <footer class="mt-20 bg-slate-900 text-slate-400 py-16 px-4 border-t border-white/5">
+        <div class="container mx-auto max-w-4xl text-center">
+            <div class="mb-10 space-y-3">
+                <div class="flex items-center justify-center gap-3 text-white">
+                    <span class="text-3xl">🇵🇭</span>
+                    <span class="text-2xl font-black tracking-tighter">PH-1 <span class="text-blue-500">菲华助手</span></span>
                 </div>
+                 
+            </div>
 
-                <div class="space-y-4">
-                    <h3 class="text-white font-bold">快捷工具</h3>
-                    <ul class="text-sm space-y-2">
-                        <li><a href="#" class="hover:text-blue-400 transition-colors">实时比索汇率换算器</a></li>
-                        <li><a href="#" class="hover:text-blue-400 transition-colors">菲律宾签证到期计算</a></li>
-                        <li><a href="#" class="hover:text-blue-400 transition-colors">移民局总局办事攻略</a></li>
-                        <li><a href="#" class="hover:text-blue-400 transition-colors">菲律宾驾照办理指南</a></li>
-                    </ul>
-                </div>
+            <div class="max-w-2xl mx-auto mb-12">
+                <p class="text-sm leading-relaxed text-slate-400">
+                    PH-1.com 致力于消除信息差。为您提供 <span class="text-slate-200">2026 实时比索汇率</span>、<span class="text-slate-200">签证风险预警</span> 及全方位的 <span class="text-slate-200">马尼拉办事避坑指南</span>。我们不只是工具，更是您在菲律宾生活的数字向导。
+                </p>
+            </div>
 
-                <div class="space-y-4">
-                    <h3 class="text-white font-bold">联系我们</h3>
-                    <p class="text-sm">合作咨询：<span class="text-blue-400 cursor-pointer" onclick="copyAndGo()">@ph_one_com (Telegram)</span></p>
-                    <div class="pt-2">
-                        <span class="inline-block bg-slate-800 px-3 py-1 rounded text-[10px] uppercase tracking-widest font-bold">2026 Updated</span>
-                    </div>
+            <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-12 text-[13px] font-bold">
+                <a href="#" class="text-slate-300 hover:text-blue-400 transition-colors underline-offset-8 hover:underline">汇率换算器</a>
+                <a href="#" class="text-slate-300 hover:text-blue-400 transition-colors underline-offset-8 hover:underline">签证计算器</a>
+                <a href="#" class="text-slate-300 hover:text-blue-400 transition-colors underline-offset-8 hover:underline">移民局攻略</a>
+                <a href="#" class="text-slate-300 hover:text-blue-400 transition-colors underline-offset-8 hover:underline">驾照指南</a>
+            </div>
+
+            <div class="flex justify-center mb-16">
+                <div onclick="copyAndGo()" class="cursor-pointer group flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 rounded-full transition-all active:scale-95">
+                    <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.717-.962 4.084-1.362 5.411-.168.56-.505.747-.747.769-.544.05-1.088-.272-1.451-.51-.568-.372-.888-.603-1.439-.965-.636-.418-.224-.65.139-1.026.095-.099 1.756-1.611 1.789-1.751.004-.017.008-.082-.03-.115s-.096-.022-.138-.012c-.059.014-.999.636-2.822 1.868-.267.183-.509.273-.725.267-.239-.006-.699-.136-1.041-.247-.42-.136-.753-.208-.724-.439.015-.121.181-.245.499-.372 1.946-.848 3.243-1.407 3.892-1.677 1.85-.769 2.235-.903 2.485-.908.055-.001.178.013.258.077.068.056.086.131.093.187.007.054.009.11.006.166z" /></svg>
+                    <span class="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">Telegram: @ph_one_com</span>
                 </div>
             </div>
 
-            <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px]">
-                <div class="text-center md:text-left">
-                    © 2026 PH-1.com (菲华助手). All Rights Reserved.
-                    <span class="hidden md:inline ml-4 text-slate-600">菲律宾换汇, 马尼拉租房, 签证延期, 比索汇率走势, 菲华生活网</span>
-                </div>
-                <div class="flex gap-4">
+            <div class="pt-8 border-t border-white/5 space-y-4">
+                <div class="flex flex-wrap justify-center gap-4 text-[11px] font-medium uppercase tracking-widest text-slate-500">
                     <a href="/privacy.html" class="hover:text-white transition-colors">隐私政策</a>
+                    <span>•</span>
                     <a href="/terms.html" class="hover:text-white transition-colors">服务条款</a>
+                    <span>•</span>
                     <a href="/sitemap.xml" class="hover:text-white transition-colors">站点地图</a>
                 </div>
+                <p class="text-[11px] text-slate-600 font-bold">
+                    © 2026 PH-1.COM. ALL RIGHTS RESERVED.
+                </p>
             </div>
+
         </div>
     </footer>
-    <script>
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/display.js"></script>
+    <script type="module">
+        //import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        //import {
+        //    getDatabase, ref, push, onChildAdded, onValue, runTransaction,
+        //    query, orderByChild, limitToLast, get, endAt, remove
+        //} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        //const firebaseConfig = {
+        //    apiKey: "AIzaSyBCB9Vyw7Cw-Tx3CphIlTroBRGrqKUcVb8",
+        //    authDomain: "ph-1-com.firebaseapp.com",
+        //    projectId: "ph-1-com",
+        //    storageBucket: "ph-1-com.firebasestorage.app",
+        //    messagingSenderId: "509583748605",
+        //    appId: "1:509583748605:web:9b19972990ea06db627d94",
+        //    measurementId: "G-LWV16K64X7",
+        //    databaseURL: "https://ph-1-com-default-rtdb.asia-southeast1.firebasedatabase.app"
+        //};
+
+        //const app = initializeApp(firebaseConfig);
+        //const db = getDatabase(app);
         // --- 逻辑与之前版本保持一致 ---
         let currentRate = 8.70;
         const LOSS_RATE = 0.985;
@@ -250,19 +401,19 @@
             res.innerText = val ? (parseFloat(val) * currentRate * LOSS_RATE).toFixed(2) : "0.00";
         }
 
-        function calcToCny() {
+        window.calcToCny = () => {
             const val = document.getElementById('phpInput').value;
             const res = document.getElementById('cnyResult');
             res.innerText = val ? (parseFloat(val) / currentRate * LOSS_RATE).toFixed(2) : "0.00";
         }
 
-        function quickSet(amt) {
+        window.quickSet = (amt) => {
             document.getElementById('cnyInput').value = amt;
             calcToPhp();
             if (window.navigator.vibrate) window.navigator.vibrate(10);
         }
 
-        async function fetchRate(isForced = false) {
+        window.fetchRate = async (isForced = false) => {
             const dot = document.getElementById('status-dot');
             const txt = document.getElementById('rate-time');
             const display = document.getElementById('php-rate');
@@ -296,7 +447,7 @@
             }
         }
 
-        function updateUI(rate, ts, mode) {
+        window.updateUI = (rate, ts, mode) => {
             const dot = document.getElementById('status-dot');
             const txt = document.getElementById('rate-time');
             const display = document.getElementById('php-rate');
@@ -313,7 +464,7 @@
             calcToCny();
         }
 
-        function calcVisa() {
+        window.calcVisa = () => {
             const d = document.getElementById('vDate').value;
             const days = parseInt(document.getElementById('vType').value);
             if (!d) return alert("请先选择日期");
@@ -331,7 +482,7 @@
             `;
         }
 
-        function copyAndGo() {
+        window.copyAndGo = () => {
             const tgId = "ph_one_com";
             const tip = document.getElementById('copyTip');
             navigator.clipboard.writeText(tgId).then(() => {
@@ -342,7 +493,7 @@
                 }, 800);
             });
         }
-        async function shareSite() {
+        window.shareSite = async () => {
             const shareData = {
                 title: 'PH-1 菲华助手',
                 text: '我在用这个菲律宾生活工具箱，算汇率、查签证、避坑指南超好用！推荐给你 🇵🇭',
@@ -363,9 +514,11 @@
                 console.log('分享取消或失败:', err);
             }
         }
+        
+
         window.onload = function () {
-            document.getElementById('cnyInput').addEventListener('input', calcToPhp);
-            document.getElementById('phpInput').addEventListener('input', calcToCny);
+            document.getElementById('cnyInput').oninput = window.calcToPhp;
+            document.getElementById('phpInput').oninput = window.calcToCny;
             document.getElementById('locList').innerHTML = locations.map(loc => `
                 <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
                     <h3 class="font-bold text-slate-800 mb-1">${loc.name}</h3>
@@ -374,13 +527,22 @@
                         <span class="text-[10px] text-slate-500 font-bold tracking-tight">Grab: ₱${loc.grab}</span>
                         <a href="${loc.mapUrl}" target="_blank" class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-xl text-[10px] font-bold">查看地图</a>
                     </div>
-                    <div class="p-3 bg-rose-50 rounded-xl text-[11px] text-rose-700 border-l-4 border-rose-400">
+                      <div class="p-3 bg-rose-50 rounded-2xl text-[11px] text-rose-700 border-l-4 border-rose-400 mb-4">
                         <strong>避坑指南：</strong>${loc.tips}
+                    </div>
+                        <div class="grid grid-cols-3 gap-2">
+                        <button onclick="window.voteStatus('${loc.name}', '🏃')" data-vote-for="${loc.name}" data-status="🏃" class="text-[10px] py-2 bg-slate-50 text-slate-600 rounded-xl border border-slate-100 font-bold hover:bg-green-50">🏃</button>
+                        <button onclick="window.voteStatus('${loc.name}', '🚶')" data-vote-for="${loc.name}" data-status="🚶" class="text-[10px] py-2 bg-slate-50 text-slate-600 rounded-xl border border-slate-100 font-bold hover:bg-amber-50">🚶</button>
+                        <button onclick="window.voteStatus('${loc.name}', '🐢')" data-vote-for="${loc.name}" data-status="🐢" class="text-[10px] py-2 bg-slate-50 text-slate-600 rounded-xl border border-slate-100 font-bold hover:bg-rose-50">🐢</button>
                     </div>
                 </div>
             `).join('');
             fetchRate();
+
         };
+        import { syncVotes } from '/js/main.js';
+        syncVotes();
     </script>
+
 </body>
 </html>

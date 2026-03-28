@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PH-1 办事体验后台审核</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .post-card {
+            transition: all 0.3s ease;
+        }
+
+            .post-card:hover {
+                transform: translateY(-2px);
+                border-color: #3b82f6;
+            }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="flex justify-between items-center mb-8 pb-4 border-b border-slate-700">
+            <div>
+                <h1 class="text-2xl font-black text-blue-400 tracking-tight">PH-1 ADMIN</h1>
+                <p class="text-slate-500 text-sm">办事体验审核后台 (待处理清单)</p>
+            </div>
+            <div id="status-badge" class="px-3 py-1 bg-slate-800 rounded-full text-xs text-slate-400">
+                正在同步数据库...
+            </div>
+        </header>
+
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-slate-800/50 p-4 rounded-2xl border border-white/5">
+                <p class="text-slate-500 text-xs uppercase font-bold">待审核条数</p>
+                <p id="pending-count" class="text-3xl font-black text-white">0</p>
+            </div>
+            <div class="bg-slate-800/50 p-4 rounded-2xl border border-white/5">
+                <p class="text-slate-500 text-xs uppercase font-bold">系统状态</p>
+                <p class="text-3xl font-black text-green-500">LIVE</p>
+            </div>
+        </div>
+
+        <div id="admin-list" class="space-y-4">
+            <div class="text-center py-20 text-slate-600">
+                <p>正在读取待审核数据...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // 1. 引入你的配置文件 (请确保路径正确)
+        import { db, ref, query, orderByChild, equalTo, onValue, update } from "/js/firebase-config.js";
+
+        const adminList = document.getElementById("admin-list");
+        const pendingCountEl = document.getElementById("pending-count");
+        const statusBadge = document.getElementById("status-badge");
+
+        // 2. 核心监听逻辑：只监听状态为 pending 的帖子
+        const pendingQuery = query(ref(db, "posts"), orderByChild("status"), equalTo("pending"));
+
+        onValue(pendingQuery, (snapshot) => {
+            const data = snapshot.val();
+            statusBadge.innerText = `最后同步: ${new Date().toLocaleTimeString()}`;
+
+            if (!data) {
+                adminList.innerHTML = `
+                        <div class="text-center py-20 bg-slate-800/20 rounded-3xl border-2 border-dashed border-slate-800">
+                            <p class="text-slate-500">🎉 所有内容已处理完毕，暂时没有待审核贴。</p>
+                        </div>
+                    `;
+                pendingCountEl.innerText = "0";
+                return;
+            }
+
+            const keys = Object.keys(data);
+            pendingCountEl.innerText = keys.length;
+            adminList.innerHTML = ""; // 清空旧列表
+
+            // 倒序排列（新申请在前）
+            keys.reverse().forEach(postId => {
+                const post = data[postId];
+                const dateStr = new Date(post.timestamp).toLocaleString();
+
+                const card = document.createElement("div");
+                card.className = "post-card p-6 bg-slate-800 rounded-3xl border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4";
+                card.innerHTML = `
+                        <div class="flex-1">
+                            <div class="text-xs text-slate-500 mb-2 uppercase tracking-widest">${dateStr} • UID: ${post.uid.substring(0, 8)}...</div>
+                            <p class="text-slate-200 leading-relaxed font-medium">${post.content}</p>
+                        </div>
+                        <div class="flex gap-2 w-full md:w-auto">
+                            <button onclick="handleAction('${postId}', 'approved')"
+                                    class="flex-1 md:flex-none px-6 py-2 bg-green-600 hover:bg-green-500 text-white text-sm font-bold rounded-full transition-all active:scale-95">
+                                通过
+                            </button>
+                            <button onclick="handleAction('${postId}', 'rejected')"
+                                    class="flex-1 md:flex-none px-6 py-2 bg-red-600/20 hover:bg-red-600 text-red-500 hover:text-white text-sm font-bold rounded-full transition-all active:scale-95 border border-red-600/30">
+                                拒绝
+                            </button>
+                        </div>
+                    `;
+                adminList.appendChild(card);
+            });
+        });
+
+        // 3. 处理函数：由于是在 module 中，需要挂载到 window 供 onclick 调用
+        window.handleAction = async (postId, newStatus) => {
+            const confirmMsg = newStatus === 'approved' ? "确定发布这条办事体验吗？" : "确定拒绝并隐藏这条内容吗？";
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                // 更新数据库状态
+                await update(ref(db, `posts/${postId}`), {
+                    status: newStatus,
+                    reviewedAt: Date.now()
+                });
+                console.log(`Post ${postId} updated to ${newStatus}`);
+            } catch (error) {
+                console.error("审核操作失败:", error);
+                alert("操作失败，请检查数据库权限设置。");
+            }
+        };
+    </script>
+</body>
+</html>
