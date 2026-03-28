@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -514,7 +514,22 @@
                 console.log('分享取消或失败:', err);
             }
         }
-        
+           window.voteStatus = (locName, status) => {
+            // 关键：清理掉名称中的非法字符（Firebase key 限制）
+            const safeKey = locName.replace(/[.#$/[\]]/g, "_");
+            const voteRef = ref(db, `votes/${safeKey}/${status}`);
+
+            // 使用 runTransaction 确保并发安全
+            runTransaction(voteRef, (currentValue) => {
+                return (currentValue || 0) + 1;
+            }).then(() => {
+                console.log("投票成功:", safeKey, status);
+                alert(`[${locName}] 感谢反馈！`);
+            }).catch((error) => {
+                console.error("投票失败:", error);
+                alert("由于网络或权限原因，反馈暂未提交。");
+            });
+        };
 
         window.onload = function () {
             document.getElementById('cnyInput').oninput = window.calcToPhp;
