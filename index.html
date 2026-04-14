@@ -369,25 +369,7 @@
     <script type="module" src="/js/main.js"></script>
     <script type="module" src="/js/display.js"></script>
     <script type="module">
-        //import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        //import {
-        //    getDatabase, ref, push, onChildAdded, onValue, runTransaction,
-        //    query, orderByChild, limitToLast, get, endAt, remove
-        //} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        //const firebaseConfig = {
-        //    apiKey: "AIzaSyBCB9Vyw7Cw-Tx3CphIlTroBRGrqKUcVb8",
-        //    authDomain: "ph-1-com.firebaseapp.com",
-        //    projectId: "ph-1-com",
-        //    storageBucket: "ph-1-com.firebasestorage.app",
-        //    messagingSenderId: "509583748605",
-        //    appId: "1:509583748605:web:9b19972990ea06db627d94",
-        //    measurementId: "G-LWV16K64X7",
-        //    databaseURL: "https://ph-1-com-default-rtdb.asia-southeast1.firebasedatabase.app"
-        //};
-
-        //const app = initializeApp(firebaseConfig);
-        //const db = getDatabase(app);
+        
         // --- 逻辑与之前版本保持一致 ---
         let currentRate = 8.70;
         const LOSS_RATE = 0.985;
@@ -395,11 +377,11 @@
         const CACHE_TIME = 3600000;
 
         const locations = [{ name: "移民局总局 (BI Main Office)", addr: "Magallanes Dr, Intramuros, Manila", mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+Main+Office+Intramuros", grab: "350-500", tips: "禁拖鞋短裤。建议早7点到场。办ECC务必提前3天。" }, { name: "移民局 BGC 分局 (SM Aura)", addr: "8th Floor, SM Aura Tower, Taguig", mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Immigration+SM+Aura", grab: "150-300", tips: "环境极佳。仅限简单续签，不受理工签降签业务。" }, { name: "DFA 外交部总局 (ASEANA)", addr: "Aseana Business Park, Parañaque", mapUrl: "https://www.google.com/maps/search/?api=1&query=DFA+Aseana+Consular+Office", grab: "400-600", tips: "必须持打印好的预约单。现场不接受Walk-in。" }, { name: "NBI 办事处 (UN Ave)", addr: "650 UN Ave, Ermita, Manila", mapUrl: "https://www.google.com/maps/search/?api=1&query=NBI+Clearance+Center+UN+Ave", grab: "200-400", tips: "姓名重名(HIT)需等10天。建议穿深色有领衣服拍摄。" }, { name: "LTO 运输署总局 (驾照业务)", addr: "LTO Compound, East Ave, Quezon City", mapUrl: "https://www.google.com/maps/search/?api=1&query=LTO+Main+Office+East+Ave", grab: "400-600", tips: "严禁背心短裤。务必先注册LTMS账号。无视门外所有伸手搭讪的‘中介’。" }, { name: "PSA 统计局 (出生/结婚证)", addr: "PSA Complex, East Ave, Quezon City", mapUrl: "https://www.google.com/maps/search/?api=1&query=Philippine+Statistics+Authority+East+Ave", grab: "400-600", tips: "需提前在线预约。若不急用，建议去各大SM商场的PSA代办点，环境更舒适。" }, { name: "BIR 税务局总署 (TIN税卡)", addr: "BIR Road, Diliman, Quezon City", mapUrl: "https://www.google.com/maps/search/?api=1&query=Bureau+of+Internal+Revenue+Main", grab: "350-550", tips: "税卡丢失补办或信息更新首选。下午3点停止放号，请务必赶早。" }];
-        function calcToPhp() {
-            const val = document.getElementById('cnyInput').value;
-            const res = document.getElementById('phpResult');
-            res.innerText = val ? (parseFloat(val) * currentRate * LOSS_RATE).toFixed(2) : "0.00";
-        }
+		window.calcToPhp = () => {
+			const val = document.getElementById('cnyInput').value;
+			const res = document.getElementById('phpResult');
+			res.innerText = val ? (parseFloat(val) * currentRate * LOSS_RATE).toFixed(2) : "0.00";
+		}
 
         window.calcToCny = () => {
             const val = document.getElementById('phpInput').value;
